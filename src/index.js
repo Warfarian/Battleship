@@ -21,19 +21,21 @@ class Ship{
 
     isSunk(){
         if (this.length === this.hit){
-            return true;
+            return true;            
         }
         else{
             return false;
         }        
+        
     }
 }
 
 
 class Gameboard {
-    constructor(missedAttacks, actualAttacks){
-        this.missedAttacks = [];
-        this.actualAttacks = [];
+    constructor(missedAttacks, actualAttacks,allShipsSunk){
+        this.missedAttacks = [],
+        this.actualAttacks = [],
+        this.allShipsSunk = false;
     }
 
     receiveAttack(attackCoordinates,coords){
@@ -65,15 +67,23 @@ class Gameboard {
 
 
     winner(){
-        
+        let sunkShips = 0;
+        let winner = null;
+        if (sunkShips === 5){
+            return winner;
+        }
+
+        else{
+            return;
+        }
     }
 
 
 }
 
 class Players{
-    player = {};
-    cpu = {};
+    player = new Gameboard();
+    cpu = new Gameboard();
 }
 
 export {Ship,Gameboard,Players};
