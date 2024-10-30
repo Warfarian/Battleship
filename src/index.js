@@ -31,8 +31,8 @@ class Ship{
 
 
 class Gameboard {
-    constructor(attacks, actualAttacks){
-        this.attacks = [];
+    constructor(missedAttacks, actualAttacks){
+        this.missedAttacks = [];
         this.actualAttacks = [];
     }
 
@@ -40,17 +40,17 @@ class Gameboard {
         if (this.arraysEqual(attackCoordinates,coords)){
             if (!this.actualAttacks.some(temp => this.arraysEqual(temp,coords))){
                 this.actualAttacks.push(attackCoordinates);
-                this.attacks.push(attackCoordinates);
+                this.missedAttacks.push(attackCoordinates);
                     return this.actualAttacks;
                 }
             }   
         else{
-            if (!this.attacks.some(coords => this.arraysEqual(coords,attackCoordinates))){
-                this.attacks.push(attackCoordinates);
-                 return this.attacks;
+            if (!this.missedAttacks.some(coords => this.arraysEqual(coords,attackCoordinates))){
+                this.missedAttacks.push(attackCoordinates);
+                 return this.missedAttacks;
             }
         }
-        return this.actualAttacks,this.attacks;
+        return this.actualAttacks,this.missedAttacks;
     }
 
     arraysEqual(arr1,arr2){
