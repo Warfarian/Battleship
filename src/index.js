@@ -1,10 +1,11 @@
 import ('./styles.css')
 
 class Ship{
-    constructor(length,hit,currentlySunk){
+    constructor(length,hit,currentlySunk,shipCoordinates){
         this.length = length,
         this.hit = hit,
-        this.currentlySunk = currentlySunk;
+        this.currentlySunk = currentlySunk,
+        this.shipCoordinates = null;
     }
 
     shipLength(){
@@ -35,9 +36,9 @@ class Gameboard {
         this.actualAttacks = [];
     }
 
-    receiveAttack(attackCoordinates,actualCoordinates){
-        if (this.arraysEqual(attackCoordinates,actualCoordinates)){
-            if (!this.actualAttacks.some(coords => this.arraysEqual(coords,actualCoordinates))){
+    receiveAttack(attackCoordinates,coords){
+        if (this.arraysEqual(attackCoordinates,coords)){
+            if (!this.actualAttacks.some(temp => this.arraysEqual(temp,coords))){
                 this.actualAttacks.push(attackCoordinates);
                 this.attacks.push(attackCoordinates);
                     return this.actualAttacks;
@@ -46,15 +47,22 @@ class Gameboard {
         else{
             if (!this.attacks.some(coords => this.arraysEqual(coords,attackCoordinates))){
                 this.attacks.push(attackCoordinates);
-                 return attacks;
+                 return this.attacks;
             }
         }
-        return this.actualAttacks;
+        return this.actualAttacks,this.attacks;
     }
 
     arraysEqual(arr1,arr2){
         return Array.isArray(arr1) && Array.isArray(arr2) && arr1.length === arr2.length && arr1.every((value,index) => value === arr2[index]);
     }
+
+    assignCoordinates(coords){
+        let newShip = new Ship();
+        coords = newShip.shipCoordinates;
+        return coords;
+    }
+
 
     winner(){
         

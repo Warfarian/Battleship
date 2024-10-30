@@ -36,3 +36,10 @@ it("Attack works!",()=>{
     newGameBoard.receiveAttack([0,1],[0,1]);
     expect(newGameBoard.actualAttacks).toEqual([[0,1]]);
 })
+
+it("Assign coordinates", () => {
+    let newGameBoard = new Gameboard();
+    let coords = [1,1];
+    newGameBoard.receiveAttack([0,1],coords);
+    expect(newGameBoard.attacks).toEqual([[0,1]]);
+})
