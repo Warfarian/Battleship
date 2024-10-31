@@ -1,7 +1,7 @@
 class Ship{
     constructor(length,hit,currentlySunk,shipCoordinates){
         this.length = length,
-        this.hit = hit,
+        this.hit = hit || 0,
         this.currentlySunk = currentlySunk,
         this.shipCoordinates = null;
     }
