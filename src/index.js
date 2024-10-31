@@ -28,10 +28,17 @@ const gameboardContainer = document.querySelector('#gameBoards-container');
 
 function createBoards(color,player){
     const gameboard = document.createElement('div');
-    gameboard.classList.add('gameboard-container');
+    gameboard.classList.add('gameboard');
     gameboardContainer.append(gameboard);
     gameboard.style.backgroundColor = color;
     gameboard.id = player;
+
+    for (let i =0; i < width * width; i++){
+        let block = document.createElement('div');
+        block.classList.add('block');
+        block.id = i;
+        gameboard.append(block);
+    }
 }
 
 
