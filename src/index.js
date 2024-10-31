@@ -1,33 +1,39 @@
-import { Ship, Gameboard, Players } from "./modules/main.js";
 import('./styles.css');
-import { createGrid } from "./modules/domManipulation.js";
+
+// ship deployment section 
+
+const rotateButton = document.querySelector('#rotate');
+const optionContainer = document.querySelector('.option-container');
+let angle = 0;
 
 
-
-const newPlayer = new Players();
-newPlayer.Gameboard = new Gameboard();
-
-
-
-
-let createShips = (length,hit,currentlySunk,shipCoordinates) => {
-    let temp = new Ship(length,hit,currentlySunk,shipCoordinates);
+function flip(){
+    const optionShips = Array.from(optionContainer.children);
+    if (angle === 0){
+        angle = 90;
+    }
+    else{
+        angle = 0;
+    }
+    optionShips.forEach((optionShip)=>optionShip.style.transform = `rotate(${angle}deg)`)
 }
 
-// click events
-const playerCell = document.querySelectorAll('.playerGrid-cell');
-playerCell.forEach((cell)=>{
-    cell.addEventListener('click',getCoords);
-})
 
-const cpuCell = document.querySelectorAll('.cpuGrid-cell');
-cpuCell.forEach((cell)=>{
-    cell.addEventListener('click',getCoords);
-})
+rotateButton.addEventListener('click', flip);
 
-// grid create function call
-createGrid('playerGrid', 100);
-createGrid('cpuGrid', 100);
+// create boards
+
+const width = 10;
+const gameboardContainer = document.querySelector('#gameBoards-container');
+
+function createBoards(color,player){
+    const gameboard = document.createElement('div');
+    gameboard.classList.add('gameboard-container');
+    gameboardContainer.append(gameboard);
+    gameboard.style.backgroundColor = color;
+    gameboard.id = player;
+}
 
 
-export {newPlayer}
+createBoards('pink','user');
+createBoards('lightblue','computer');

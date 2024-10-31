@@ -1,49 +1,70 @@
-
-.displayGrids {
+.option-container {
+    background-color: rgb(189, 217, 242);
+    width: 65%;
+    height: 100px;
+    border-radius: 8px;
     display: flex;
-    justify-content: center;
-}
-
-.grid {
-    display: grid;
-    grid-template-columns: repeat(10, 75px);
-    grid-template-rows: repeat(10, 75px);
-    gap: 5px;
-    margin: 20px;
-    background-color: #fff;
-    border: 2px solid #ccc;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-
-.playerGrid-cell {
-    display: flex;
-    justify-content: center;
     align-items: center;
-    background-color: white;
-    border-radius: 5px;
-    border: 1px solid black;
-    transition: background-color 0.3s;
+    gap: 15px;
 }
 
-.cpuGrid-cell {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: white;
-    border-radius: 5px;
-    border: 1px solid black;
-    transition: background-color 0.3s;
+.destroyer-preview {
+    width: 40px;
+    height: 20px; /* Smaller height */
+    background-color: rgb(223, 2, 2);
+    margin: 10px;
+    border-radius: 8px;
 }
 
-.playerGrid-cell:hover{
-    background-color: green;
-}
-.cpuGrid-cell:hover {
-    background-color: rgb(255, 3, 3);
+.submarine-preview {
+    width: 60px;
+    height: 25px; /* Smaller height */
+    border-radius: 8px;
+    background-color: rgb(30, 230, 220);
 }
 
-h1{
-    font-size:75px;
+.cruiser-preview {
+    width: 85px;
+    height: 30px; /* Smaller height */
+    border-radius: 8px;
+    background-color: rgb(0, 0, 0);
+}
+
+.battleship-preview {
+    width: 90px;
+    height: 35px; /* Smaller height */
+    border-radius: 8px;
+    background-color: rgb(77, 26, 218);
+}
+
+.carrier-preview {
+    width: 100px;
+    height: 40px; /* Smaller height */
+    border-radius: 8px;
+    background-color: rgb(22, 248, 44);
+}
+
+button{
+    margin: 15px;
+}
+p{
     text-align: center;
+}
+
+.gameboard-container{
+    width: 350px ;
+    height: 350px ;
+    border: 1px solid;
+    margin: 30px;
+    border-radius: 8px;
+}
+
+#gameBoards-container{
+    display: flex;
+    justify-content: center;
+}
+
+.block{
+    width: 35px;
+    height: 35px;
 }
