@@ -1,6 +1,6 @@
 import('./styles.css');
 
-// Ship deployment section 
+// Ship deployment section
 const rotateButton = document.querySelector('#rotate');
 const optionContainer = document.querySelector('.option-container');
 let angle = 0;
@@ -10,49 +10,10 @@ function flip() {
     angle = angle === 0 ? 90 : 0; // Toggle angle
     optionShips.forEach((optionShip) => optionShip.style.transform = `rotate(${angle}deg)`);
 }
-
 rotateButton.addEventListener('click', flip);
 
-// Dragging the ships
-let draggedShip;
-const optionShips = Array.from(optionContainer.children);
-optionShips.forEach(optionShip => {
-    optionShip.setAttribute('draggable', true);
-    optionShip.addEventListener('dragstart', dragStart);
-});
+// ____________ Creating the ships ____________
 
-const allPlayerBlocks = document.querySelectorAll('#user div');
-allPlayerBlocks.forEach((playerBlock) => {
-    playerBlock.addEventListener('dragover', dragOver);
-    playerBlock.addEventListener('drop', dropShip);
-});
-
-function dragStart(e) {
-    notDropped = false;
-    draggedShip = e.target;
-}
-
-function dragOver(e) {
-    e.preventDefault(); // Necessary to allow dropping
-}
-
-function dropShip(e) {
-    e.preventDefault(); // Prevent default behavior (e.g., opening a link)
-    
-    const startId = e.target.id; // Use the id of the drop target
-    const ship = ships.find(s => s.name === draggedShip.id); // Find the corresponding ship object
-
-    if (ship) {
-        const success = user.placeShip('player', ship, startId);
-        if (success && notDropped) {
-            draggedShip.remove(); // Remove the ship from the option container
-        }
-    }
-}
-
-
-
-// Creating the ships
 class Ship {
     constructor(name, length, hits, currentlySunk) {
         this.name = name;
@@ -60,12 +21,10 @@ class Ship {
         this.hits = hits;
         this.currentlySunk = currentlySunk;
     }
-
     hit() {
         this.hits += 1;
         return this.hits;
     }
-
     isSunk() {
         if (this.hits === this.length) {
             this.currentlySunk = true;
@@ -78,26 +37,32 @@ class Ship {
 const width = 10;
 const gameboardContainer = document.querySelector('#gameBoards-container');
 
-// GameBoard class creation 
+
+// ____________ GameBoard class creation ____________
+
 class GameBoard {
     constructor() {
         this.ships = [];
         this.missedAttacks = [];
     }
-
     createBoards(color, player) {
         const gameboard = document.createElement('div');
         gameboard.classList.add('gameboard');
         gameboard.style.backgroundColor = color;
         gameboard.id = player;
+        console.log(`Creating gameboard with id: ${player}`);
         gameboardContainer.append(gameboard);
 
         for (let i = 0; i < width * width; i++) {
             const block = document.createElement('div');
             block.classList.add('block');
+            block.classList.add(player); // Add player as a class
             block.id = i;
             gameboard.append(block);
+            console.log(`Block created with ID: ${i}`);
         }
+
+        console.log(`Gameboard created for ${player} with ${gameboard.childElementCount} blocks.`);
     }
 
     placeShip(userType, ship, startId) {
@@ -141,13 +106,12 @@ class GameBoard {
                 shipBlock.classList.add('taken');
                 shipBlock.classList.add(ship.name);
             });
-
             placedSuccessfully = true; // Successfully placed the ship
         } else {
             // Randomly place ship for the computer
             do {
                 let randomStartIndex = Math.floor(Math.random() * width * width);
-                let isHorizontal = Math.random() < 0.5; // Random orientation
+                let isHorizontal = user === 'player' ? angle === 0 : Math.random() < 0.5; // Random orientation
 
                 // Check if the ship can fit
                 if (isHorizontal) {
@@ -180,12 +144,11 @@ class GameBoard {
                     shipBlock.classList.add('taken');
                     shipBlock.classList.add(ship.name);
                 });
-
-                placedSuccessfully = true; 
-                this.ships.push(ship); //add tp board
+                placedSuccessfully = true;
+                this.ships.push(ship); // Add to board
                 // Successfully placed the ship
             } while (!placedSuccessfully);
-            return this.placedSuccessfully
+            return this.placedSuccessfully;
         }
     }
 }
@@ -193,17 +156,74 @@ class GameBoard {
 // Function call to create the boards
 const user = new GameBoard();
 const computer = new GameBoard();
-
 user.createBoards('pink', 'user');
 computer.createBoards('lightblue', 'computer');
 
-// Create the ships
+// ____________ Dragging the ships ____________
+
+let draggedShip;
+let notDropped = true; // Declare the variable
+const optionShips = Array.from(optionContainer.children);
+
+optionShips.forEach(optionShip => {
+    optionShip.setAttribute('draggable', true);
+    optionShip.addEventListener('dragstart', dragStart);
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const allPlayerBlocks = document.querySelectorAll('#user .block');
+    console.log('Player blocks:', allPlayerBlocks.length);
+    allPlayerBlocks.forEach((playerBlock) => {
+        console.log('Adding event listeners to:', playerBlock.id);
+        playerBlock.addEventListener('dragover', dragOver);
+        playerBlock.addEventListener('drop', dropShip);
+    });
+});
+
+function dragStart(e) {
+    console.log('Drag started:', e.target);
+    notDropped = false;
+    draggedShip = e.target;
+}
+
+function dragOver(e) {
+    e.preventDefault(); // Necessary to allow dropping
+    console.log('Dragging over:', e.target);
+}
+
+function dropShip(e) {
+    e.preventDefault(); // Prevent default behavior (e.g., opening a link)
+    console.log('Dropped on:', e.target);
+
+    const startId = e.target.id; // Ensure the target has the correct ID
+    console.log('StartId:', startId);
+
+    if (!startId) {
+        console.log('No valid drop target ID');
+        return;
+    }
+
+    const ship = ships.find(s => s.name === draggedShip.id); // Find the corresponding ship object
+    console.log('Ship:', ship);
+
+    if (ship) {
+        const success = user.placeShip('player', ship, startId);
+        console.log('Placed ship:', success);
+        if (success && notDropped) {
+            draggedShip.remove(); // Remove the ship from the option container
+        }
+    } else {
+        console.log('Ship not found or not dropped correctly');
+    }
+}
+
+// ____________ Creating the ships ____________
+
 const destroyer = new Ship('destroyer', 2, 0, false);
 const submarine = new Ship('submarine', 3, 0, false);
 const cruiser = new Ship('cruiser', 3, 0, false);
 const battleship = new Ship('battleship', 4, 0, false);
 const carrier = new Ship('carrier', 5, 0, false);
-
 const ships = [destroyer, submarine, cruiser, battleship, carrier];
 
 // Place ships for the computer (you may want to do this at game start)
