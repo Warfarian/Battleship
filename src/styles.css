@@ -143,19 +143,15 @@ p {
 }
 
 /* Ship Placement Styles */
-/* .taken {
-    transition: background-color 0.3s ease;
-}
-
-.taken.carrier { background-color: #A3D5A0; }
-.taken.submarine { background-color: #4BB543; }
-.taken.cruiser { background-color: #3E6F4A; }
-.taken.destroyer { background-color: #2E8B57; }
-.taken.battleship { background-color: #8EDB8D; } */
+#user .taken.carrier { background-color: #A3D5A0; }
+#user .taken.submarine { background-color: #4BB543; }
+#user .taken.cruiser { background-color: #3E6F4A; }
+#user .taken.destroyer { background-color: #2E8B57; }
+#user .taken.battleship { background-color: #8EDB8D; }
 
 /* Sunk Ship Styles */
 .sunk {
-    background-color: #444 !important; /* Dark gray base for all sunk ships */
+    background-color: #444 !important;
     position: relative;
     overflow: hidden;
 }
