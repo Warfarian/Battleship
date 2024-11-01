@@ -195,6 +195,23 @@ p {
     cursor: not-allowed;
 }
 
+.ship-visible {
+    background-color: gray !important;
+}
+
+.taken {
+    position: relative;
+}
+
+/* Style for hits and misses remains visible for both players */
+.boom {
+    background-color: red !important;
+}
+
+.empty {
+    background-color: darkgray !important;
+}
+
 /* Animations */
 @keyframes hitEffect {
     0% {

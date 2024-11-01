@@ -144,8 +144,7 @@ class GameBoard {
             }
         }
     }
-}   
-
+}
 // ____________ Creating the ships ____________
 
 const destroyer = new Ship('destroyer', 2, 0, false);
@@ -269,7 +268,7 @@ function attackHandler(e) {
 
     if (e.target.classList.contains('taken')) {
         e.target.classList.add('boom');
-        info.textContent = "That's a hit!"
+        info.textContent = "That's a hit!";
         let classes = Array.from(e.target.classList);
         classes = classes.filter(className => 
             className !== 'block' &&
@@ -279,20 +278,22 @@ function attackHandler(e) {
         );
         playerHits.push(...classes);
         checkScore('player', playerHits, playerSunkShips);
+
+        // If the player hits, they get another turn, so we don't toggle `playerTurn`
     } else {
         e.target.classList.add("empty");
-        info.textContent = "That's a miss!"
+        info.textContent = "That's a miss!";
         user.missedAttacks.push(e.target.id);
+        
+        playerTurn = false; // Player turn ends after a miss
+        turnInfo.textContent = "Computer's turn";
+        
+        // Remove click handlers during computer's turn
+        const allBoardBlocks = document.querySelectorAll('#computer div');
+        allBoardBlocks.forEach(block => block.replaceWith(block.cloneNode(true)));
+
+        setTimeout(computerGo, 1000);
     }
-    
-    playerTurn = false;
-    turnInfo.textContent = "Computer's turn";
-    
-    // Remove click handlers during computer's turn
-    const allBoardBlocks = document.querySelectorAll('#computer div');
-    allBoardBlocks.forEach(block => block.replaceWith(block.cloneNode(true)));
-    
-    setTimeout(computerGo, 1000);
 }
 
 function computerGo() {
@@ -330,22 +331,27 @@ function computerGo() {
             );
             computerHits.push(...classes);
             checkScore('computer', computerHits, computerSunkShips);
+
+            // Computer hit, so it gets another turn
+            setTimeout(computerGo, 1000);
         } else {
             targetBlock.classList.add('empty');
             info.textContent = 'Computer missed!';
+
+            // Player's turn after computer misses
+            setTimeout(() => {
+                if (!gameOver) {
+                    playerTurn = true;
+                    turnInfo.textContent = "Your Go!";
+                    info.textContent = "Please take your go";
+                    const allBoardBlocks = document.querySelectorAll('#computer div');
+                    allBoardBlocks.forEach(block => block.addEventListener('click', attackHandler));
+                }
+            }, 1000);
         }
     }, 1000);
-
-    setTimeout(() => {
-        if (!gameOver) {
-            playerTurn = true;
-            turnInfo.textContent = "Your Go!";
-            info.textContent = "Please take your go";
-            const allBoardBlocks = document.querySelectorAll('#computer div');
-            allBoardBlocks.forEach(block => block.addEventListener('click', attackHandler));
-        }
-    }, 2000);
 }
+
 
 function checkScore(user, userHits, userSunkShips) {
     function checkShip(shipName, shipLength) {
