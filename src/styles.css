@@ -8,7 +8,7 @@
     gap: 15px;
 }
 
-.destroyer-preview {
+.destroyer.preview {
     width: 40px;
     height: 20px; /* Smaller height */
     background-color: #2E8B57;
@@ -16,28 +16,28 @@
     border-radius: 8px;
 }
 
-.submarine-preview {
+.submarine.preview {
     width: 60px;
     height: 25px; /* Smaller height */
     border-radius: 8px;
     background-color: #4BB543;
 }
 
-.cruiser-preview {
+.cruiser.preview {
     width: 85px;
     height: 30px; /* Smaller height */
     border-radius: 8px;
     background-color: #3E6F4A ;
 }
 
-.battleship-preview {
+.battleship.preview {
     width: 90px;
     height: 35px; /* Smaller height */
     border-radius: 8px;
     background-color: #8EDB8D ;
 }
 
-.carrier-preview {
+.carrier.preview {
     width: 100px;
     height: 40px; /* Smaller height */
     border-radius: 8px;

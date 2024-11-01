@@ -37,7 +37,6 @@ class Ship {
 const width = 10;
 const gameboardContainer = document.querySelector('#gameBoards-container');
 
-
 // ____________ GameBoard class creation ____________
 
 class GameBoard {
@@ -59,7 +58,6 @@ class GameBoard {
             block.classList.add(player); // Add player as a class
             block.id = i;
             gameboard.append(block);
-            console.log(`Block created with ID: ${i}`);
         }
 
         console.log(`Gameboard created for ${player} with ${gameboard.childElementCount} blocks.`);
@@ -67,155 +65,88 @@ class GameBoard {
 
     placeShip(userType, ship, startId) {
         const allBoardBlocks = document.querySelectorAll(`#${userType} div`);
-        let validStartIndex;
-        let placedSuccessfully = false;
+        let validStartIndex = Number(startId);
+        let isHorizontal = userType === 'user' ? angle === 0 : Math.random() < 0.5;
 
-        if (userType === "player") {
-            // User placed ship
-            validStartIndex = Number(startId);
-            let isHorizontal = angle === 0; // Check user's orientation
-
-            // Check if the ship fits based on orientation
-            if (isHorizontal) {
-                if (validStartIndex % width <= width - ship.length) {
-                    // Valid horizontal start
-                } else {
-                    return; // Not enough space horizontally
-                }
-            } else {
-                if (validStartIndex + ship.length * width < width * width) {
-                    // Valid vertical start
-                } else {
-                    return; // Not enough space vertically
-                }
+        // Check if the ship fits
+        if (isHorizontal) {
+            if (validStartIndex % width > width - ship.length) {
+                console.log('Ship does not fit horizontally');
+                return false;
             }
-
-            // Prepare ship blocks
-            let shipBlocks = [];
-            for (let i = 0; i < ship.length; i++) {
-                shipBlocks.push(isHorizontal ? allBoardBlocks[validStartIndex + i] : allBoardBlocks[validStartIndex + i * width]);
-            }
-
-            // Check if any of the blocks are already taken
-            if (shipBlocks.some(block => block.classList.contains('taken'))) {
-                return; // If any block is taken, do nothing
-            }
-
-            // Mark the blocks as taken
-            shipBlocks.forEach((shipBlock) => {
-                shipBlock.classList.add('taken');
-                shipBlock.classList.add(ship.name);
-            });
-            placedSuccessfully = true; // Successfully placed the ship
         } else {
-            // Randomly place ship for the computer
-            do {
-                let randomStartIndex = Math.floor(Math.random() * width * width);
-                let isHorizontal = user === 'player' ? angle === 0 : Math.random() < 0.5; // Random orientation
+            if (validStartIndex + (ship.length - 1) * width >= width * width) {
+                console.log('Ship does not fit vertically');
+                return false;
+            }
+        }
 
-                // Check if the ship can fit
-                if (isHorizontal) {
-                    if (randomStartIndex % width <= width - ship.length) {
-                        validStartIndex = randomStartIndex; // Valid horizontal start
-                    } else {
-                        continue; // Not enough space
-                    }
-                } else {
-                    if (randomStartIndex + ship.length * width < width * width) {
-                        validStartIndex = randomStartIndex; // Valid vertical start
-                    } else {
-                        continue; // Not enough space
-                    }
-                }
+        // Prepare ship blocks
+        let shipBlocks = [];
+        for (let i = 0; i < ship.length; i++) {
+            let blockIndex = isHorizontal 
+                ? validStartIndex + i 
+                : validStartIndex + i * width;
+            shipBlocks.push(allBoardBlocks[blockIndex]);
+        }
 
-                // Prepare ship blocks
-                let shipBlocks = [];
-                for (let i = 0; i < ship.length; i++) {
-                    shipBlocks.push(isHorizontal ? allBoardBlocks[validStartIndex + i] : allBoardBlocks[validStartIndex + i * width]);
-                }
+        // Check if blocks are already taken
+        if (shipBlocks.some(block => block.classList.contains('taken'))) {
+            console.log('Some blocks are already taken');
+            return false;
+        }
 
-                // Check if any of the blocks are already taken
-                if (shipBlocks.some(block => block.classList.contains('taken'))) {
-                    continue; // If any block is taken, continue to find a new position
-                }
+        // Mark blocks as taken
+        shipBlocks.forEach((shipBlock) => {
+            shipBlock.classList.add('taken');
+            shipBlock.classList.add(ship.name);
+        });
 
-                // Mark the blocks as taken
-                shipBlocks.forEach((shipBlock) => {
-                    shipBlock.classList.add('taken');
-                    shipBlock.classList.add(ship.name);
-                });
-                placedSuccessfully = true;
-                this.ships.push(ship); // Add to board
-                // Successfully placed the ship
-            } while (!placedSuccessfully);
-            return this.placedSuccessfully;
+        if (userType === 'computer') {
+            this.ships.push(ship);
+        }
+
+        console.log(`${ship.name} placed successfully`);
+        return true;
+    }
+
+    computerPlaceShips(gameBoard) {
+        const shipsCopy = [...ships]; // Create a copy to avoid modifying original array
+        
+        // Shuffle ships to randomize placement order
+        for (let i = shipsCopy.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shipsCopy[i], shipsCopy[j]] = [shipsCopy[j], shipsCopy[i]];
+        }
+    
+        // Attempt to place each ship
+        for (const ship of shipsCopy) {
+            let placed = false;
+            let attempts = 0;
+            const maxAttempts = 100; // Prevent infinite loop
+    
+            while (!placed && attempts < maxAttempts) {
+                // Randomly choose horizontal or vertical orientation
+                const isHorizontal = Math.random() < 0.5;
+                
+                // Generate a random start position
+                const startId = Math.floor(Math.random() * (width * width));
+    
+                // Try to place the ship
+                placed = gameBoard.placeShip('computer', ship, startId);
+                attempts++;
+            }
+    
+            if (!placed) {
+                console.error(`Could not place ${ship.name} after ${maxAttempts} attempts`);
+            }
         }
     }
 }
 
-// Function call to create the boards
-const user = new GameBoard();
-const computer = new GameBoard();
-user.createBoards('pink', 'user');
-computer.createBoards('lightblue', 'computer');
 
-// ____________ Dragging the ships ____________
+// ____________ Computer ship placement____________
 
-let draggedShip;
-let notDropped = true; // Declare the variable
-const optionShips = Array.from(optionContainer.children);
-
-optionShips.forEach(optionShip => {
-    optionShip.setAttribute('draggable', true);
-    optionShip.addEventListener('dragstart', dragStart);
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    const allPlayerBlocks = document.querySelectorAll('#user .block');
-    console.log('Player blocks:', allPlayerBlocks.length);
-    allPlayerBlocks.forEach((playerBlock) => {
-        console.log('Adding event listeners to:', playerBlock.id);
-        playerBlock.addEventListener('dragover', dragOver);
-        playerBlock.addEventListener('drop', dropShip);
-    });
-});
-
-function dragStart(e) {
-    console.log('Drag started:', e.target);
-    notDropped = false;
-    draggedShip = e.target;
-}
-
-function dragOver(e) {
-    e.preventDefault(); // Necessary to allow dropping
-    console.log('Dragging over:', e.target);
-}
-
-function dropShip(e) {
-    e.preventDefault(); // Prevent default behavior (e.g., opening a link)
-    console.log('Dropped on:', e.target);
-
-    const startId = e.target.id; // Ensure the target has the correct ID
-    console.log('StartId:', startId);
-
-    if (!startId) {
-        console.log('No valid drop target ID');
-        return;
-    }
-
-    const ship = ships.find(s => s.name === draggedShip.id); // Find the corresponding ship object
-    console.log('Ship:', ship);
-
-    if (ship) {
-        const success = user.placeShip('player', ship, startId);
-        console.log('Placed ship:', success);
-        if (success && notDropped) {
-            draggedShip.remove(); // Remove the ship from the option container
-        }
-    } else {
-        console.log('Ship not found or not dropped correctly');
-    }
-}
 
 // ____________ Creating the ships ____________
 
@@ -226,5 +157,67 @@ const battleship = new Ship('battleship', 4, 0, false);
 const carrier = new Ship('carrier', 5, 0, false);
 const ships = [destroyer, submarine, cruiser, battleship, carrier];
 
-// Place ships for the computer (you may want to do this at game start)
-ships.forEach((ship) => computer.placeShip('computer', ship));
+// Function call to create the boards
+const user = new GameBoard();
+const computer = new GameBoard();
+user.createBoards('pink', 'user');
+computer.createBoards('lightblue', 'computer');
+
+// Drag and Drop variables
+let draggedShip;
+let draggedShipId;
+let notDropped = true;
+
+// Set up draggable ships
+const optionShips = Array.from(optionContainer.children);
+optionShips.forEach(optionShip => {
+    optionShip.setAttribute('draggable', true);
+    optionShip.addEventListener('dragstart', dragStart);
+});
+
+// Drag Start Function
+function dragStart(e) {
+    draggedShip = e.target;
+    draggedShipId = draggedShip.id;
+    notDropped = false;
+    console.log('Drag started:', draggedShip, 'ID:', draggedShipId);
+}
+
+// Drag Over Function
+function dragOver(e) {
+    e.preventDefault();
+}
+
+// Drop Ship Function
+function dropShip(e) {
+    e.preventDefault();
+    const startId = e.target.id;
+    console.log('Dropped on block ID:', startId);
+
+    // Find the ship based on the dragged ship's ID
+    const ship = ships[draggedShipId];
+    console.log('Ship to place:', ship);
+
+    if (ship) {
+        const success = user.placeShip('user', ship, startId);
+        
+        if (success) {
+            draggedShip.remove(); // Remove from option container
+            notDropped = true;
+        }
+    }
+}
+
+// Add event listeners to player blocks
+document.addEventListener('DOMContentLoaded', () => {
+    const allPlayerBlocks = document.querySelectorAll('#user .block');
+    allPlayerBlocks.forEach((playerBlock) => {
+        playerBlock.addEventListener('dragover', dragOver);
+        playerBlock.addEventListener('drop', dropShip);
+    });
+});
+
+// Computer ship placement
+
+let computerPlace = new GameBoard();
+computerPlace.computerPlaceShips(computer);
