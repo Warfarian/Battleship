@@ -78,43 +78,57 @@ class gameBoard{
 
 placeShipRandom(ship) {
     const allBoardBlocks = document.querySelectorAll(`#computer div`);
-    let randomStartIndex;
-    let isHorizontal;
+    let validStartIndex;
+    let placedSuccessfully = false;
 
-    // Ensure the ship fits on the board based on orientation
     do {
-        randomStartIndex = Math.floor(Math.random() * width * width);
-        isHorizontal = Math.random() < 0.5;
+        // Randomly determine orientation and starting index
+        const isHorizontal = Math.random() < 0.5;
+        let randomStartIndex = Math.floor(Math.random() * width * width);
 
-        // Check if the ship will fit
+        // Determine if the ship fits based on orientation
         if (isHorizontal) {
-            let row = Math.floor(randomStartIndex / width);
-            if (randomStartIndex % width + ship.length > width) {
-                continue; // Not enough space horizontally
+            // Check if the ship can fit horizontally
+            if (randomStartIndex % width <= width - ship.length) {
+                validStartIndex = randomStartIndex; // Valid horizontal start
+            } else {
+                continue; // Not enough space horizontally, continue to next iteration
             }
         } else {
-            if (randomStartIndex + ship.length * width >= width * width) {
-                continue; // Not enough space vertically
+            // Check if the ship can fit vertically
+            if (randomStartIndex + ship.length * width < width * width) {
+                validStartIndex = randomStartIndex; // Valid vertical start
+            } else {
+                continue; // Not enough space vertically, continue to next iteration
             }
         }
-        break; // Break out of the loop if valid
-    } while (true);
 
-    let shipBlocks = [];
-
-    for (let i = 0; i < ship.length; i++) {
-        if (isHorizontal) {
-            shipBlocks.push(allBoardBlocks[randomStartIndex + i]);
-        } else {
-            shipBlocks.push(allBoardBlocks[randomStartIndex + i * width]);
+        // At this point, validStartIndex should be valid
+        let shipBlocks = [];
+        for (let i = 0; i < ship.length; i++) {
+            if (isHorizontal) {
+                shipBlocks.push(allBoardBlocks[validStartIndex + i]);
+            } else {
+                shipBlocks.push(allBoardBlocks[validStartIndex + i * width]);
+            }
         }
-    }
 
-    shipBlocks.forEach((shipBlock) => {
-        shipBlock.classList.add('taken');
-        shipBlock.classList.add(ship.name);
-    });
+        // Check if any of the blocks are already taken
+        if (shipBlocks.some(block => block.classList.contains('taken'))) {
+            continue; // If any block is taken, continue to find a new position
+        }
+
+        // Mark the blocks as taken
+        shipBlocks.forEach((shipBlock) => {
+            shipBlock.classList.add('taken');
+            shipBlock.classList.add(ship.name);
+        });
+
+        placedSuccessfully = true; // Successfully placed the ship
+
+    } while (!placedSuccessfully);
 }
+
 
 
 }
@@ -135,7 +149,6 @@ const submarine = new Ship('submarine',3,3,false);
 const cruiser = new Ship('cruiser',3,0,false);
 const battleship = new Ship('battleship',4,0,false);
 const carrier = new Ship('carrier',5,0,false);
-
 const shipCollection = [destroyer,submarine,cruiser,battleship,carrier];
 
 

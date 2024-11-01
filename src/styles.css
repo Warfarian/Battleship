@@ -11,7 +11,7 @@
 .destroyer-preview {
     width: 40px;
     height: 20px; /* Smaller height */
-    background-color: rgb(223, 2, 2);
+    background-color: #2E8B57;
     margin: 10px;
     border-radius: 8px;
 }
@@ -20,29 +20,30 @@
     width: 60px;
     height: 25px; /* Smaller height */
     border-radius: 8px;
-    background-color: rgb(30, 230, 220);
+    background-color: #4BB543;
 }
 
 .cruiser-preview {
     width: 85px;
     height: 30px; /* Smaller height */
     border-radius: 8px;
-    background-color: rgb(0, 0, 0);
+    background-color: #3E6F4A ;
 }
 
 .battleship-preview {
     width: 90px;
     height: 35px; /* Smaller height */
     border-radius: 8px;
-    background-color: rgb(77, 26, 218);
+    background-color: #8EDB8D ;
 }
 
 .carrier-preview {
     width: 100px;
     height: 40px; /* Smaller height */
     border-radius: 8px;
-    background-color: rgb(22, 248, 44);
+    background-color: #A3D5A0  ;
 }
+
 
 button{
     margin: 15px;
@@ -77,6 +78,22 @@ p{
 
 /* Class to mark ships */
 
-.taken{
-    background-color: brown;
+.taken.carrier{
+    background-color:#A3D5A0 ;
+}
+
+.taken.submarine{
+    background-color: #4BB543;
+}
+
+.taken.cruiser{
+    background-color: #3E6F4A ;
+}
+
+.taken.destroyer{
+    background-color: #2E8B57;
+}
+
+.taken.battleship{
+    background-color: #8EDB8D ;
 }
