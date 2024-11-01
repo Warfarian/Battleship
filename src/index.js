@@ -259,17 +259,17 @@ function startGame() {
 
 function attackHandler(e) {
     if (!gameStarted || !playerTurn || gameOver) {
-        return;
+        return; // Prevent clicks if it's not player's turn or game is over
     }
 
     if (e.target.classList.contains('boom') || e.target.classList.contains('empty')) {
         info.textContent = "You already fired at this spot!";
-        return;
+        return; // Prevent clicking on already hit spots
     }
 
     if (e.target.classList.contains('taken')) {
         e.target.classList.add('boom');
-        info.textContent = "That's a hit! Take another shot!";
+        info.textContent = "That's a hit!"
         let classes = Array.from(e.target.classList);
         classes = classes.filter(className => 
             className !== 'block' &&
@@ -279,22 +279,20 @@ function attackHandler(e) {
         );
         playerHits.push(...classes);
         checkScore('player', playerHits, playerSunkShips);
-        // Don't switch turns on a hit
-        return;
     } else {
         e.target.classList.add("empty");
-        info.textContent = "That's a miss!";
+        info.textContent = "That's a miss!"
         user.missedAttacks.push(e.target.id);
-        // Switch turns only on a miss
-        playerTurn = false;
-        turnInfo.textContent = "Computer's turn";
-        
-        // Remove click handlers during computer's turn
-        const allBoardBlocks = document.querySelectorAll('#computer div');
-        allBoardBlocks.forEach(block => block.replaceWith(block.cloneNode(true)));
-        
-        setTimeout(computerGo, 1000);
     }
+    
+    playerTurn = false;
+    turnInfo.textContent = "Computer's turn";
+    
+    // Remove click handlers during computer's turn
+    const allBoardBlocks = document.querySelectorAll('#computer div');
+    allBoardBlocks.forEach(block => block.replaceWith(block.cloneNode(true)));
+    
+    setTimeout(computerGo, 1000);
 }
 
 function computerGo() {
@@ -310,6 +308,7 @@ function computerGo() {
         let randomGo;
         let targetBlock;
         
+        // Keep trying until we find a valid spot
         do {
             randomGo = Math.floor(Math.random() * allBoardBlocks.length);
             targetBlock = allBoardBlocks[randomGo];
@@ -320,7 +319,7 @@ function computerGo() {
 
         if (targetBlock.classList.contains('taken')) {
             targetBlock.classList.add('boom');
-            info.textContent = "The computer hit your ship! Computer gets another turn!";
+            info.textContent = "The computer hit your ship!";
             
             let classes = Array.from(targetBlock.classList);
             classes = classes.filter(className => 
@@ -331,25 +330,23 @@ function computerGo() {
             );
             computerHits.push(...classes);
             checkScore('computer', computerHits, computerSunkShips);
-            // Computer gets another turn on hit
-            setTimeout(computerGo, 1000);
-            return;
         } else {
             targetBlock.classList.add('empty');
             info.textContent = 'Computer missed!';
-            // Switch turns only on a miss
-            setTimeout(() => {
-                if (!gameOver) {
-                    playerTurn = true;
-                    turnInfo.textContent = "Your Go!";
-                    info.textContent = "Please take your go";
-                    const allBoardBlocks = document.querySelectorAll('#computer div');
-                    allBoardBlocks.forEach(block => block.addEventListener('click', attackHandler));
-                }
-            }, 1000);
         }
     }, 1000);
+
+    setTimeout(() => {
+        if (!gameOver) {
+            playerTurn = true;
+            turnInfo.textContent = "Your Go!";
+            info.textContent = "Please take your go";
+            const allBoardBlocks = document.querySelectorAll('#computer div');
+            allBoardBlocks.forEach(block => block.addEventListener('click', attackHandler));
+        }
+    }, 2000);
 }
+
 function checkScore(user, userHits, userSunkShips) {
     function checkShip(shipName, shipLength) {
         if (
