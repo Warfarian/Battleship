@@ -58,7 +58,7 @@ p{
     display: flex;
     margin: 30px;
     flex-wrap: wrap;
-    gap: 1px;
+    gap: 2px;
     justify-content: center;
 }
 
@@ -68,7 +68,8 @@ p{
 }
 
 .block{
-    border: 1px solid;
-    width: 47px;
-    height: 47px;
+    border: 1px solid ;
+    width: 46px;
+    height: 46px;
+    border-radius: 4px;
 }

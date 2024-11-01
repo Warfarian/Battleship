@@ -41,6 +41,58 @@ function createBoards(color,player){
     }
 }
 
+// board creation function call
 
 createBoards('pink','user');
 createBoards('lightblue','computer');
+
+//creating the ships
+
+class Ship{
+    constructor(name,length,hits,currentlySunk){
+        this.name = name;
+        this.length = length;
+        this.hits = hits;
+        this.currentlySunk = currentlySunk;
+    }
+
+    hit(){
+            this.hits = this.hits + 1;
+            return this.hits;
+        
+    }
+
+    isSunk(){
+        if (this.hits === this.length){
+            this.currentlySunk = true;
+            return this.currentlySunk;
+        }
+        else{
+            return this.currentlySunk;
+        }
+    }
+
+}
+
+
+// gameBoard class creation 
+
+class gameBoard{
+    constructor(){
+
+    }
+}
+
+// create the ships
+
+const destroyer   = new Ship('destroyer',2,0,false);
+const submarine = new Ship('submarine',3,3,false);
+const cruiser = new Ship('cruiser',3,0,false);
+const battleship = new Ship('battleship',4,0,false);
+const carrier = new Ship('carrier',5,0,false);
+
+const shipCollection = [destroyer,submarine,cruiser,battleship,carrier];
+
+// export statements , will modularize later
+
+export {Ship}
