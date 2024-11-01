@@ -1,3 +1,4 @@
+/* Game Container Styles */
 .option-container {
     background-color: rgb(189, 217, 242);
     width: 65%;
@@ -6,11 +7,31 @@
     display: flex;
     align-items: center;
     gap: 15px;
+    padding: 0 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+}
+
+/* Ship Preview Styles */
+[class*="preview"] {
+    cursor: grab;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+[class*="preview"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+[class*="preview"]:active {
+    cursor: grabbing;
+    transform: scale(0.98);
 }
 
 .destroyer.preview {
     width: 40px;
-    height: 20px; /* Smaller height */
+    height: 20px;
     background-color: #2E8B57;
     margin: 10px;
     border-radius: 8px;
@@ -18,82 +39,212 @@
 
 .submarine.preview {
     width: 60px;
-    height: 25px; /* Smaller height */
+    height: 25px;
     border-radius: 8px;
     background-color: #4BB543;
 }
 
 .cruiser.preview {
     width: 85px;
-    height: 30px; /* Smaller height */
+    height: 30px;
     border-radius: 8px;
-    background-color: #3E6F4A ;
+    background-color: #3E6F4A;
 }
 
 .battleship.preview {
     width: 90px;
-    height: 35px; /* Smaller height */
+    height: 35px;
     border-radius: 8px;
-    background-color: #8EDB8D ;
+    background-color: #8EDB8D;
 }
 
 .carrier.preview {
     width: 100px;
-    height: 40px; /* Smaller height */
+    height: 40px;
     border-radius: 8px;
-    background-color: #A3D5A0  ;
+    background-color: #A3D5A0;
 }
 
-
-button{
+/* Button Styles */
+button {
     margin: 15px;
-}
-p{
-    text-align: center;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    background-color: #4BB543;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
-.gameboard{
+button:hover {
+    background-color: #3E6F4A;
+    transform: translateY(-1px);
+}
+
+button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Text Styles */
+p {
+    text-align: center;
+    margin: 10px 0;
+    font-size: 1.1em;
+}
+
+#info, #turn-display {
+    font-weight: bold;
+    color: #333;
+    min-height: 24px;
+    transition: color 0.3s ease;
+}
+
+/* Game Board Styles */
+#gameBoards-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+.gameboard {
     width: 500px;
-    height: 500px ;
-    border: 1px solid;
+    height: 500px;
+    border: 2px solid #333;
     display: flex;
     margin: 30px;
     flex-wrap: wrap;
     gap: 2px;
     justify-content: center;
+    border-radius: 8px;
+    padding: 4px;
+    background-color: rgba(0, 0, 0, 0.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 }
 
-#gameBoards-container{
-    display: flex;
-    justify-content: center;
-}
-
-.block{
-    border: 1px solid ;
+.block {
+    border: 1px solid rgba(0, 0, 0, 0.2);
     width: 46px;
     height: 46px;
     border-radius: 4px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    cursor: pointer;
 }
 
-
-/* Class to mark ships */
-
-.taken.carrier{
-    background-color:#A3D5A0 ;
+/* Hover effects for computer board blocks during player turn */
+#computer .block:not(.boom):not(.empty):hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    transform: scale(1.05);
 }
 
-.taken.submarine{
-    background-color: #4BB543;
+/* Ship Placement Styles */
+/* .taken {
+    transition: background-color 0.3s ease;
 }
 
-.taken.cruiser{
-    background-color: #3E6F4A ;
+.taken.carrier { background-color: #A3D5A0; }
+.taken.submarine { background-color: #4BB543; }
+.taken.cruiser { background-color: #3E6F4A; }
+.taken.destroyer { background-color: #2E8B57; }
+.taken.battleship { background-color: #8EDB8D; } */
+
+/* Sunk Ship Styles */
+.sunk {
+    background-color: #444 !important; /* Dark gray base for all sunk ships */
+    position: relative;
+    overflow: hidden;
 }
 
-.taken.destroyer{
-    background-color: #2E8B57;
+.sunk::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+        45deg,
+        rgba(0, 0, 0, 0.3),
+        rgba(0, 0, 0, 0.3) 5px,
+        rgba(0, 0, 0, 0.5) 5px,
+        rgba(0, 0, 0, 0.5) 10px
+    );
+    animation: smokeEffect 2s infinite linear;
 }
 
-.taken.battleship{
-    background-color: #8EDB8D ;
+/* Hit and Miss Styles */
+.boom {
+    background-color: #ff4444;
+    animation: hitEffect 0.5s ease-out;
+    cursor: not-allowed;
+}
+
+.boom.sunk {
+    background-color: #444 !important;
+    animation: sunkEffect 1s ease-out;
+}
+
+.empty {
+    background-color: rgb(163, 163, 179);
+    animation: missEffect 0.5s ease-out;
+    cursor: not-allowed;
+}
+
+/* Animations */
+@keyframes hitEffect {
+    0% {
+        transform: scale(1);
+        background-color: white;
+    }
+    50% {
+        transform: scale(1.1);
+        background-color: #ff6666;
+    }
+    100% {
+        transform: scale(1);
+        background-color: #ff4444;
+    }
+}
+
+@keyframes sunkEffect {
+    0% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+    50% {
+        transform: scale(1.1);
+        filter: brightness(0.7);
+    }
+    100% {
+        transform: scale(1);
+        filter: brightness(0.4);
+    }
+}
+
+@keyframes smokeEffect {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 50px 50px;
+    }
+}
+
+@keyframes missEffect {
+    0% {
+        transform: scale(1);
+        background-color: white;
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+        background-color: rgb(163, 163, 179);
+    }
 }
