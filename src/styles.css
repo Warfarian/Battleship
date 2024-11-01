@@ -73,3 +73,10 @@ p{
     height: 46px;
     border-radius: 4px;
 }
+
+
+/* Class to mark ships */
+
+.taken{
+    background-color: brown;
+}
