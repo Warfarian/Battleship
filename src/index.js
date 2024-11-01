@@ -49,7 +49,6 @@ class GameBoard {
         gameboard.classList.add('gameboard');
         gameboard.style.backgroundColor = color;
         gameboard.id = player;
-        console.log(`Creating gameboard with id: ${player}`);
         gameboardContainer.append(gameboard);
 
         for (let i = 0; i < width * width; i++) {
@@ -59,11 +58,11 @@ class GameBoard {
             block.id = i;
             gameboard.append(block);
         }
-
-        console.log(`Gameboard created for ${player} with ${gameboard.childElementCount} blocks.`);
     }
 
     placeShip(userType, ship, startId) {
+        let info = document.querySelector('#info');
+        info.innerHTML = '';
         const allBoardBlocks = document.querySelectorAll(`#${userType} div`);
         let validStartIndex = Number(startId);
         let isHorizontal = userType === 'user' ? angle === 0 : Math.random() < 0.5;
@@ -71,12 +70,12 @@ class GameBoard {
         // Check if the ship fits
         if (isHorizontal) {
             if (validStartIndex % width > width - ship.length) {
-                console.log('Ship does not fit horizontally');
+                info.innerHTML = ' Ship does not fit horizontally';
                 return false;
             }
         } else {
             if (validStartIndex + (ship.length - 1) * width >= width * width) {
-                console.log('Ship does not fit vertically');
+                info.innerHTML = ' Ship does not fit vertically';
                 return false;
             }
         }
@@ -105,8 +104,10 @@ class GameBoard {
         if (userType === 'computer') {
             this.ships.push(ship);
         }
-
-        console.log(`${ship.name} placed successfully`);
+        
+        
+        info.innerHTML = '';
+        info.innerHTML = (` ${ship.name} placed successfully`);
         return true;
     }
 
@@ -135,12 +136,18 @@ class GameBoard {
                 // Try to place the ship
                 placed = gameBoard.placeShip('computer', ship, startId);
                 attempts++;
+                info.innerHTML = '';
             }
     
             if (!placed) {
                 console.error(`Could not place ${ship.name} after ${maxAttempts} attempts`);
             }
         }
+    }
+
+
+    attackLogic(userAttack,coords){
+
     }
 }
 
