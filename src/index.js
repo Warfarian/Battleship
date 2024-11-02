@@ -11,7 +11,12 @@ export class GameController {
         this.gameStarted = false;
         this.playerTurn = true;
         this.gameOver = false;
-        
+
+        // New AI targeting properties
+        this.lastHit = null;
+        this.potentialTargets = [];
+        this.successfulHits = [];
+
         this.init();
     }
 
@@ -108,22 +113,69 @@ export class GameController {
         this.checkGameOver();
     }
 
+ getAdjacentPositions(position) {
+        const adjacentPositions = [];
+        const row = Math.floor(position / 10);
+        const col = position % 10;
+
+        // Check above
+        if (row > 0) adjacentPositions.push(position - 10);
+        // Check below
+        if (row < 9) adjacentPositions.push(position + 10);
+        // Check left
+        if (col > 0) adjacentPositions.push(position - 1);
+        // Check right
+        if (col < 9) adjacentPositions.push(position + 1);
+
+        return adjacentPositions;
+    }
+
+    isValidTarget(position) {
+        return position >= 0 && 
+               position < 100 && 
+               !this.playerBoard.missedAttacks.includes(position) && 
+               !document.querySelector(`#user div[id="${position}"]`).classList.contains('boom');
+    }
+
     computerTurn() {
         setTimeout(() => {
             let position;
-            do {
-                position = Math.floor(Math.random() * 100);
-            } while (this.playerBoard.missedAttacks.includes(position) || 
-                    document.querySelector(`#user div[id="${position}"]`).classList.contains('boom'));
+
+            if (this.potentialTargets.length > 0) {
+                // Try positions adjacent to previous hits
+                position = this.potentialTargets.shift();
+            } else if (this.lastHit !== null) {
+                // If we just got a hit but have no potential targets, check all adjacent positions
+                const adjacent = this.getAdjacentPositions(this.lastHit);
+                this.potentialTargets = adjacent.filter(pos => this.isValidTarget(pos));
+                position = this.potentialTargets.shift() || this.getRandomPosition();
+            } else {
+                position = this.getRandomPosition();
+            }
 
             const result = this.playerBoard.receiveAttack(position);
             this.domController.updateBoardDisplay('user', position, result);
 
             if (result.hit) {
                 this.updateGameStatus('Computer landed a hit!', 'Computer\'s turn');
+                this.lastHit = position;
+                this.successfulHits.push(position);
+
+                // Add adjacent positions to potential targets
+                const adjacent = this.getAdjacentPositions(position);
+                const newTargets = adjacent.filter(pos => 
+                    this.isValidTarget(pos) && 
+                    !this.potentialTargets.includes(pos)
+                );
+                this.potentialTargets.push(...newTargets);
+
                 // Check if ship was sunk
                 if (result.ship && result.ship.isSunk()) {
                     this.updateGameStatus(`Computer sunk your ${result.ship.name}!`, 'Computer\'s turn');
+                    // Reset targeting when ship is sunk
+                    this.lastHit = null;
+                    this.potentialTargets = [];
+                    this.successfulHits = [];
                 }
                 this.computerTurn();
             } else {
@@ -133,6 +185,14 @@ export class GameController {
 
             this.checkGameOver();
         }, 1000);
+    }
+
+    getRandomPosition() {
+        let position;
+        do {
+            position = Math.floor(Math.random() * 100);
+        } while (!this.isValidTarget(position));
+        return position;
     }
 
     checkGameOver() {
