@@ -35,7 +35,7 @@ export class GameBoard {
             if (validStartIndex % this.width > this.width - ship.length) {
                 return false;
             }
-        } else {
+        } else {    
             if (validStartIndex + (ship.length - 1) * this.width >= this.width * this.width) {
                 return false;
             }

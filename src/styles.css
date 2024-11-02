@@ -112,7 +112,7 @@ p {
 .game-status {
     position: sticky;
     top: 0;
-    background-color: rgba(255, 253, 245, 0.95);
+    background-color: rgba(239, 223, 158, 0.95);
     padding: 10px;
     z-index: 100;
     border-bottom: 2px solid #ddd;
