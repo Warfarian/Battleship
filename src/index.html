@@ -7,14 +7,15 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div>
-    <div class="game-info">
-        <p>Turn:<span id="turn-display"></span></p>
-        <p>Info:<span id="info"></span></p>
+    <div class="game-status">
+        <div id="info"></div>
+        <div id="turn-display"></div>
+        <button id="start">Start Game</button>
+        <button id="rotate">Rotate Ship</button>
     </div>
+    <div>
 <div style="display: flex; justify-content: center;">
     
-        <button id="start">Start</button>
 </div>
     <div id="gameBoards-container">
         
@@ -28,7 +29,6 @@
         <div class="carrier preview" id="4" draggable="true"></div>
     </div>
  
-    <div style="display: flex; justify-content: center;"><button id="rotate">Rotate</button></div>
 <script src="index.js"></script>    
 </body>
 </html>
