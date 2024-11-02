@@ -1,2 +1,4 @@
 # Battleship
-A battleship game
+A battleship game!
+
+[Live Demo](https://warfarian.github.io/Battleship/)
