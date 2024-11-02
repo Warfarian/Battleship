@@ -1,90 +1,92 @@
 /* Game Container Styles */
 .option-container {
-    background-color: rgb(189, 217, 242);
-    width: 65%;
-    height: 100px;
-    border-radius: 8px;
+    background-color: rgb(161, 213, 246);
+    width: 70%;
+    height: 120px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
-    gap: 15px;
-    padding: 0 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin: 20px auto;
+    gap: 20px;
+    padding: 0 25px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    margin: 25px auto;
 }
 
 /* Ship Preview Styles */
 [class*="preview"] {
     cursor: grab;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
 }
 
 [class*="preview"]:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
 [class*="preview"]:active {
     cursor: grabbing;
-    transform: scale(0.98);
+    transform: scale(0.95);
 }
 
 .destroyer.preview {
-    width: 40px;
-    height: 20px;
-    background-color: #2E8B57;
-    margin: 10px;
-    border-radius: 8px;
+    width: 50px;
+    height: 24px;
+    background-color: #a6d6ee;
+    margin: 12px;
+    border-radius: 10px;
 }
 
 .submarine.preview {
-    width: 60px;
-    height: 25px;
-    border-radius: 8px;
-    background-color: #4BB543;
+    width: 70px;
+    height: 28px;
+    background-color: #9cdee3;
+    border-radius: 10px;
 }
 
 .cruiser.preview {
-    width: 85px;
-    height: 30px;
-    border-radius: 8px;
-    background-color: #3E6F4A;
+    width: 90px;
+    height: 32px;
+    background-color: #7AB2D3;
+    border-radius: 10px;
 }
 
 .battleship.preview {
-    width: 90px;
-    height: 35px;
-    border-radius: 8px;
-    background-color: #8EDB8D;
+    width: 110px;
+    height: 36px;
+    background-color: #4A628A;
+    border-radius: 10px;
 }
 
 .carrier.preview {
-    width: 100px;
-    height: 40px;
-    border-radius: 8px;
-    background-color: #A3D5A0;
+    width: 130px;
+    height: 42px;
+    background-color: #2f3d57;
+    border-radius: 10px;
 }
 
 /* Button Styles */
 button {
     margin: 15px;
-    padding: 10px 20px;
+    padding: 12px 24px;
     border: none;
-    border-radius: 6px;
-    background-color: #4BB543;
+    border-radius: 8px;
+    background-color: #4c7caf;
     color: white;
     font-weight: bold;
+    font-size: 1.1em;
     cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease;
+    transition: background-color 0.3s ease, transform 0.1s ease;
 }
 
 button:hover {
-    background-color: #3E6F4A;
-    transform: translateY(-1px);
+    background-color: #388E3C;
+    transform: translateY(-2px);
 }
 
 button:disabled {
-    background-color: #cccccc;
+    background-color: #BDBDBD;
     cursor: not-allowed;
     transform: none;
 }
@@ -92,14 +94,15 @@ button:disabled {
 /* Text Styles */
 p {
     text-align: center;
-    margin: 10px 0;
-    font-size: 1.1em;
+    margin: 12px 0;
+    font-size: 1.2em;
+    color: #333;
 }
 
 #info, #turn-display {
     font-weight: bold;
-    color: #333;
-    min-height: 24px;
+    color: #444;
+    min-height: 28px;
     transition: color 0.3s ease;
 }
 
@@ -107,55 +110,49 @@ p {
 #gameBoards-container {
     display: flex;
     justify-content: center;
-    gap: 40px;
-    margin-top: 30px;
+    gap: 50px;
+    margin-top: 40px;
     flex-wrap: wrap;
 }
 
 .gameboard {
-    width: 500px;
-    height: 500px;
-    border: 2px solid #333;
+    width: 520px;
+    height: 520px;
+    border: 3px solid #444;
     display: flex;
     margin: 30px;
     flex-wrap: wrap;
-    gap: 2px;
+    gap: 4px;
     justify-content: center;
-    border-radius: 8px;
-    padding: 4px;
+    border-radius: 12px;
+    padding: 6px;
     background-color: rgba(0, 0, 0, 0.05);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 }
 
 .block {
     border: 1px solid rgba(0, 0, 0, 0.2);
     width: 46px;
     height: 46px;
-    border-radius: 4px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    border-radius: 6px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
     cursor: pointer;
 }
 
 /* Hover effects for computer board blocks during player turn */
 #computer .block:not(.boom):not(.empty):hover {
     background-color: rgba(0, 0, 0, 0.1);
-    transform: scale(1.05);
+    transform: scale(1.1);
 }
 
 /* Ship Placement Styles */
-/* .taken {
-    transition: background-color 0.3s ease;
+.taken {
+    position: relative;
 }
-
-.taken.carrier { background-color: #A3D5A0; }
-.taken.submarine { background-color: #4BB543; }
-.taken.cruiser { background-color: #3E6F4A; }
-.taken.destroyer { background-color: #2E8B57; }
-.taken.battleship { background-color: #8EDB8D; } */
 
 /* Sunk Ship Styles */
 .sunk {
-    background-color: #444 !important; /* Dark gray base for all sunk ships */
+    background-color: #555 !important;
     position: relative;
     overflow: hidden;
 }
@@ -169,28 +166,28 @@ p {
     bottom: 0;
     background: repeating-linear-gradient(
         45deg,
-        rgba(0, 0, 0, 0.3),
-        rgba(0, 0, 0, 0.3) 5px,
-        rgba(0, 0, 0, 0.5) 5px,
-        rgba(0, 0, 0, 0.5) 10px
+        rgba(0, 0, 0, 0.2),
+        rgba(0, 0, 0, 0.2) 6px,
+        rgba(0, 0, 0, 0.4) 6px,
+        rgba(0, 0, 0, 0.4) 12px
     );
     animation: smokeEffect 2s infinite linear;
 }
 
 /* Hit and Miss Styles */
 .boom {
-    background-color: #ff4444;
-    animation: hitEffect 0.5s ease-out;
+    background-color: #FF6F61;
+    animation: hitEffect 0.4s ease-out;
     cursor: not-allowed;
 }
 
 .boom.sunk {
-    background-color: #444 !important;
-    animation: sunkEffect 1s ease-out;
+    background-color: #555 !important;
+    animation: sunkEffect 0.8s ease-out;
 }
 
 .empty {
-    background-color: rgb(163, 163, 179);
+    background-color: #DCDCDC;
     animation: missEffect 0.5s ease-out;
     cursor: not-allowed;
 }
@@ -199,17 +196,13 @@ p {
     background-color: gray !important;
 }
 
-.taken {
-    position: relative;
-}
-
 /* Style for hits and misses remains visible for both players */
 .boom {
-    background-color: red !important;
+    background-color: #E57373 !important;
 }
 
 .empty {
-    background-color: darkgray !important;
+    background-color: #BDBDBD !important;
 }
 
 /* Animations */
@@ -220,11 +213,11 @@ p {
     }
     50% {
         transform: scale(1.1);
-        background-color: #ff6666;
+        background-color: #FF8A80;
     }
     100% {
         transform: scale(1);
-        background-color: #ff4444;
+        background-color: #FF6F61;
     }
 }
 
@@ -235,11 +228,11 @@ p {
     }
     50% {
         transform: scale(1.1);
-        filter: brightness(0.7);
+        filter: brightness(0.6);
     }
     100% {
         transform: scale(1);
-        filter: brightness(0.4);
+        filter: brightness(0.3);
     }
 }
 
@@ -262,6 +255,15 @@ p {
     }
     100% {
         transform: scale(1);
-        background-color: rgb(163, 163, 179);
+        background-color: #DCDCDC;
     }
+}
+
+body{
+    background-color: beige;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+button{
+    text-align: center;
 }
